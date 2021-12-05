@@ -1,22 +1,22 @@
 package api;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class Edge implements EdgeData {
 
-    private int src , dest ;
-    private double weight ;
+    private int src, dest;
+    private double weight;
     private int tag;
 
 
-    public Edge(int s,double w, int d ) {
+    public Edge(int s, double w, int d) {
 
-        this.src = s ;
-        this.dest = d ;
-        this.weight = w ;
+        this.src = s;
+        this.dest = d;
+        this.weight = w;
 
     }
-
 
 
     @Override
@@ -46,10 +46,10 @@ public class Edge implements EdgeData {
     @Override
     public void setInfo(String s) {
 
-       String [] arr = new String[3];
+        String[] arr = new String[3];
         Map<String, String> myMap = new HashMap<String, String>();
         String[] pairs = s.split(",");
-        for (int i=0;i<pairs.length;i++) {
+        for (int i = 0; i < pairs.length; i++) {
             String pair = pairs[i];
             String[] keyValue = pair.split(":");
             myMap.put(keyValue[0], String.valueOf(keyValue[1]));
@@ -57,10 +57,10 @@ public class Edge implements EdgeData {
         }
 
         int kk = 0;
-        for (Map.Entry<String, String> e : myMap.entrySet()){
-           arr[kk]= e.getValue();
-           kk++;
-    }
+        for (Map.Entry<String, String> e : myMap.entrySet()) {
+            arr[kk] = e.getValue();
+            kk++;
+        }
         this.dest = Integer.parseInt(arr[0]);
         this.weight = Double.parseDouble(arr[2]);
         this.src = Integer.parseInt(arr[1]);
@@ -74,6 +74,6 @@ public class Edge implements EdgeData {
 
     @Override
     public void setTag(int t) {
-    this.tag=t;
+        this.tag = t;
     }
 }

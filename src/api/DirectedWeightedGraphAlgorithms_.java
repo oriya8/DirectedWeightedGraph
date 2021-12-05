@@ -2,14 +2,7 @@ package api;
 
 import java.util.List;
 
-public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAlgorithms{
-
-
-
-
-
-
-
+public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAlgorithms {
 
 
     @Override
