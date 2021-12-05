@@ -40,12 +40,14 @@ public class Main {
 
 
         JsonArray arrOfNodes = fileoObject.get("Nodes").getAsJsonArray();
-        List<Node> Nodes = new ArrayList<>();
+        List<Node> Nodeslist = new ArrayList<>();
         for (JsonElement i : arrOfNodes) {
 
             JsonObject nd = i.getAsJsonObject();
             String l = nd.get("pos").getAsString();
-            String[] NZ = new String[3];
+            System.out.println(l);
+
+            String[] NZ;
             NZ = l.split(",");
             double a = Double.parseDouble(NZ[0]);
             double b = Double.parseDouble(NZ[1]);
@@ -54,14 +56,14 @@ public class Main {
             int id = nd.get("id").getAsInt();
 
             Node node = new Node(pos, id);
-            Nodes.add(node);
-
-            node.getInfo();
-
-
+            Nodeslist.add(node);
         }
 
+       for(Node n : Nodeslist) {
+           n.getInfo();
+           System.out.println(n.getInfo());
 
+       }
     }
 
 }
