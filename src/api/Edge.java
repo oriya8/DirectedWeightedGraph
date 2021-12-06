@@ -74,6 +74,7 @@ public class Edge implements EdgeData {
 
     @Override
     public void setTag(int t) {
+
         this.tag = t;
     }
 }

@@ -1,12 +1,15 @@
 package api;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class Node implements NodeData {
 
     private GeoLocation geo ;
     private int id ;
-    private double weight = 0;
-     private int Tag = 0;
+    private int Tag = 0;
+    private double weight = 0 ;
+    List<EdgeData> connectededges = new ArrayList<>();
 
 
     public Node(GeoLocation g , int id){
@@ -46,7 +49,7 @@ public class Node implements NodeData {
 
     @Override
     public void setWeight(double w) {
-this.weight=w;
+    this.weight=w;
     }
 
 
@@ -55,14 +58,13 @@ this.weight=w;
         return "Node{" +
                 "geo=" + geo +
                 ", id=" + id +
-                " w=" + weight +
+                ", w=" + weight +
                 " tag=" + Tag +
                 '}';
     }
 
     @Override
     public void setInfo(String s) {
-
 
     }
 

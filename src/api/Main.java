@@ -14,66 +14,29 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
+        Ex2.getGrapg("data\\G1.json");
+//        DirectedWeightedGraph kkk = new DirectedWeightedGraph_("data\\G1.json");
+        // List<Edge> Edges = new ArrayList<>();
+       //  List<Node> Nodeslist = new ArrayList<>();
+       // GeoLocation_ find = new GeoLocation_(1, 1, 1);
+       // kkk.getNode(2).setWeight(4);
+       // Node node = new Node(find,1);
+        //Nodeslist.add(node);
+      //  List<Node> Nodessssss = new ArrayList<>();
+       // GeoLocation_ find = new GeoLocation_(1, 1, 1);
+       // Node no = new Node(find,1);
+        //Nodessssss.add(no);
+        //System.out.println(Nodeslist.equals(Nodessssss));
+       // System.out.println(Nodeslist==Nodessssss);
+        //System.out.println(node.equals(no));
+         //System.out.println(node==no);
+        //System.out.println(kkk.getNode(2).getInfo());
+//        List<Node> up = new ArrayList<>();
+//        up= (List<Node>) kkk.nodeIter();
+//        for (Node g : up) {
+//            System.out.println(g.toString());
+//        }
 
-        File input = new File("data\\G1.json");
-        JsonElement fileElement = JsonParser.parseReader(new FileReader(input));
-        JsonObject fileoObject = fileElement.getAsJsonObject();
-
-        JsonArray arrOfEdges = fileoObject.get("Edges").getAsJsonArray();
-        List<Edge> Edges = new ArrayList<>();
-
-        for (JsonElement i : arrOfEdges) {
-
-            JsonObject ed = i.getAsJsonObject();
-            int src = ed.get("src").getAsInt();
-            double w = ed.get("w").getAsDouble();
-            int dest = ed.get("dest").getAsInt();
-
-            Edge e = new Edge(src, w, dest);
-            Edges.add(e);
-            System.out.println(e.getInfo());
-            System.out.println(" ");
-
-
-        }
-
-
-        JsonArray arrOfNodes = fileoObject.get("Nodes").getAsJsonArray();
-        List<Node> Nodeslist = new ArrayList<>();
-        for (JsonElement i : arrOfNodes) {
-
-            JsonObject nd = i.getAsJsonObject();
-            String l = nd.get("pos").getAsString();
-            System.out.println(l);
-
-            String[] NZ;
-            NZ = l.split(",");
-            double a = Double.parseDouble(NZ[0]);
-            double b = Double.parseDouble(NZ[1]);
-            double c = Double.parseDouble(NZ[2]);
-            GeoLocation_ pos = new GeoLocation_(a, b, c);
-            int id = nd.get("id").getAsInt();
-            Node node = new Node(pos, id);
-
-            for (Edge e : Edges) {
-
-                if (e.getSrc() == id) {
-                    // node.weight=id;
-                    System.out.println(id);
-
-                }
-            }
-
-            Nodeslist.add(node);
-        }
-
-        for (Node n : Nodeslist) {
-            n.getInfo();
-            System.out.println(n.getInfo());
-
-        }
 
     }
-
-
 }
