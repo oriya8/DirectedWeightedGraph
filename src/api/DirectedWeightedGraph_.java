@@ -10,45 +10,9 @@ import java.util.List;
 import java.util.Iterator;
 
 public class DirectedWeightedGraph_ implements DirectedWeightedGraph {
-
-    public class Main {
-
-        public void main(String[] args) throws FileNotFoundException {
-
-            File input = new File("data\\G1.json");
-            JsonElement fileElement = JsonParser.parseReader(new FileReader(input));
-            JsonObject fileoObject = fileElement.getAsJsonObject();
-
-            JsonArray arrOfEdges = fileoObject.get("Edges").getAsJsonArray();
-            List<Edge> Edges = new ArrayList<>();
-
-            for (JsonElement i : arrOfEdges) {
-
-                JsonObject ed = i.getAsJsonObject();
-//            String st = "";
-                int src = ed.get("src").getAsInt();
-                double w = ed.get("w").getAsDouble();
-                int dest = ed.get("dest").getAsInt();
-
-//             st += ed.get("src").getAsString();
-//             st += ed.get("w").getAsString();
-//             st += ed.get("dest").getAsString();
-                Edge e = new Edge(src, w, dest);
-                Edges.add(e);
-                System.out.println(e.getInfo());
-                System.out.println(" ");
-                String ss = "\"src\":4,\"w\":4.2, \"dest\":8";
-                e.setInfo(ss);
-                System.out.println(e.getInfo());
-
-            }
+  //  List<Edge> Edges = new ArrayList<>();
 
 
-            JsonArray arrOfNodes = fileoObject.get("Nodes").getAsJsonArray();
-            List<Node> Nodes = new ArrayList<>();
-
-        }
-    }
 
 
     @Override

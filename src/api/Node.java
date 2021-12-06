@@ -1,14 +1,15 @@
 package api;
 import java.util.Map;
 
-public class Node  implements NodeData {
+public class Node implements NodeData {
 
     private GeoLocation geo ;
     private int id ;
+    private double weight = 0;
+     private int Tag = 0;
 
 
     public Node(GeoLocation g , int id){
-
         this.geo = new GeoLocation_(g) ;
         this.id = id ;
 
@@ -36,11 +37,7 @@ public class Node  implements NodeData {
 
     @Override
     public double getWeight() {
-
-//        for e in Edge:
-//        if (e.getsrc() == this.id) {
-//            return e.getweight;
-         return 0 ;
+         return this.weight ;
     }
 
 
@@ -49,7 +46,7 @@ public class Node  implements NodeData {
 
     @Override
     public void setWeight(double w) {
-
+this.weight=w;
     }
 
 
@@ -58,21 +55,24 @@ public class Node  implements NodeData {
         return "Node{" +
                 "geo=" + geo +
                 ", id=" + id +
+                " w=" + weight +
+                " tag=" + Tag +
                 '}';
     }
 
     @Override
     public void setInfo(String s) {
 
+
     }
 
     @Override
     public int getTag() {
-        return 0;
+        return this.Tag;
     }
 
     @Override
     public void setTag(int t) {
-
+    this.Tag=t;
     }
 }
