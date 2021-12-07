@@ -5,13 +5,14 @@ import com.google.gson.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Iterator;
+import java.util.*;
 
 public class DirectedWeightedGraph_ implements DirectedWeightedGraph {
-   static List<Edge> Edges = new ArrayList<>();
-   static List<Node> Nodeslist = new ArrayList<>();
+  // static List<Edge> Edges = new ArrayList<>();
+//   static List<Node> Nodeslist = new ArrayList<>();
+   // Node [] answer;
+  HashMap <Integer,Node> all = new HashMap <Integer, Node>();
+  int numofedges = 0;
 
 boolean nodes=false;
 boolean edges = false;
@@ -20,20 +21,10 @@ boolean edges = false;
         File input = new File(path);
         JsonElement fileElement = JsonParser.parseReader(new FileReader(input));
         JsonObject fileoObject = fileElement.getAsJsonObject();
+        //fileoObject.
 
-        JsonArray arrOfEdges = fileoObject.get("Edges").getAsJsonArray();
-       // List<Edge> Edges = new ArrayList<>();
-        for (JsonElement i : arrOfEdges) {
-            JsonObject ed = i.getAsJsonObject();
-            int src = ed.get("src").getAsInt();
-            double w = ed.get("w").getAsDouble();
-            int dest = ed.get("dest").getAsInt();
-            Edge e = new Edge(src, w, dest);
-            this.Edges.add(e);
-            System.out.println(e.getInfo());
-            System.out.println(" ");
-        }
-
+        List<Edge> Edges = new ArrayList<>();
+        List<Node> Nodeslist = new ArrayList<>();
         JsonArray arrOfNodes = fileoObject.get("Nodes").getAsJsonArray();
         //List<Node> Nodeslist = new ArrayList<>();
         for (JsonElement i : arrOfNodes) {
@@ -48,73 +39,102 @@ boolean edges = false;
             GeoLocation_ pos = new GeoLocation_(a, b, c);
             int id = nd.get("id").getAsInt();
             Node node = new Node(pos, id);
-            this.Nodeslist.add(node);
+            Nodeslist.add(node);
+
         }
-        for (Node n : this.Nodeslist) {
+      //  Map<Integer,Edge> conedges = new HashMap<Integer, Edge>();
+      //  Map <Integer,HashMap> all = new HashMap <Integer, HashMap>();
+//
+//        Node [] answer = new Node[Nodeslist.size()];
+//        for(Node r : Nodeslist){
+//            int id = r.getKey();
+//            answer[id]=r;
+//        }
+
+
+        JsonArray arrOfEdges = fileoObject.get("Edges").getAsJsonArray();
+        // List<Edge> Edges = new ArrayList<>();
+        for (JsonElement i : arrOfEdges) {
+            JsonObject ed = i.getAsJsonObject();
+            int src = ed.get("src").getAsInt();
+            double w = ed.get("w").getAsDouble();
+            int dest = ed.get("dest").getAsInt();
+            Edge e = new Edge(src, w, dest);
+            Edges.add(e);
+            //conedges.put(dest,e);
+           // all.put(src,);
+            for (Node s : Nodeslist){
+                s.conedges.put(dest,e);
+            }
+            //Nodeslist.conedges
+            System.out.println(e.getInfo());
+            System.out.println(" ");
+
+        }
+        numofedges=Edges.size();
+        //HashMap <Integer,Node> all = new HashMap <Integer, Node>();
+        for (Node d : Nodeslist) {
+            this.all.put(d.getKey(),d);
+        }
+
+        for (Node n : Nodeslist) {
             n.getInfo();
             System.out.println(n.getInfo());
         }
     }
 
-    public Node [] bobbuilder (){
-        Node [] answer = new Node[Nodeslist.size()];
-        for(Node r : Nodeslist){
-            int id = r.getKey();
-            answer[id]=r;
-        }
-
-
-        for(Edge ed : this.Edges){
-           int loca = ed.getSrc();
-           answer[loca].connectededges.add(ed);
-        }
-
-
-
-        return answer;
-    }
-
-
-
-
-
-
-
-
+//    public Node [] bobbuilder (){
+//
+//
+//
+//        for(Edge ed : this.Edges){
+//           int loca = ed.getSrc();
+//           answer[loca].connectededges.add(ed);
+//        }
+//
+//
+//
+//        return answer;
+//    }
 
 
 
     @Override
     public NodeData getNode(int key) {
-        for (Node n : this.Nodeslist) {
-            if(n.getKey()==key){
-                return n;
-            }
-        }
-        return null;
+        return all.get(key);
+//        for (Node n : this.Nodeslist) {
+//            if(n.getKey()==key){
+//                return n;
+//            }
+//        }
     }
 
     @Override
     public EdgeData getEdge(int src, int dest) {
-        for (Edge e : this.Edges) {
-            if( e.getSrc()==src && e.getDest()==dest){
-                return e;
-            }
-        }
-        return null;
+        return all.get(src).conedges.get(dest);
+//        for (Edge e : Edges) {
+//            if( e.getSrc()==src && e.getDest()==dest){
+//                return e;
+//            }
+//        }
+        //return null;
     }
 
     @Override
     public void addNode(NodeData n) {
+
         Node adding = new Node(n.getLocation(),n.getKey());
-    Nodeslist.add(adding);
+        all.put(n.getKey(), adding);
+ //   Nodeslist.add(adding);
     this.nodes=true;
     }
 
     @Override
     public void connect(int src, int dest, double w) {
     Edge adding = new Edge(src,w,dest);
-    Edges.add(adding);
+    all.get(src).conedges.put(dest,adding);
+    numofedges++;
+   // Edges.add(adding);
     this.edges= true;
     }
 
@@ -127,7 +147,7 @@ boolean edges = false;
 ////            nodedata.add(adding);
         if(edges == true || nodes == true){
             throw new RuntimeException();}
-         Iterator it = Nodeslist.iterator();
+         Iterator it = all.values().iterator();
         return it;
     }
 
@@ -136,50 +156,70 @@ boolean edges = false;
     public Iterator<EdgeData> edgeIter() {
         if(edges == true){
             throw new RuntimeException();}
-        Iterator it = Edges.iterator();
-        return it;
+        Set entrySet = all.entrySet();
+        Iterator fin = null;
+        Iterator it = entrySet.iterator();
+
+        System.out.println("HashMap Key-Value Pairs : ");
+        while(it.hasNext()){
+            Node me = (Node)it.next();
+            fin = me.conedges.values().iterator();
+       }
+
+        return fin;
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
         if(edges == true || nodes == true){
             throw new RuntimeException();}
-        for (Node n : this.Nodeslist) {
-            if(n.getKey()==node_id){
-                Iterator it = n.connectededges.iterator();
-                return it ;
-            }
-        }
-        return null;
+        Iterator it = all.get(node_id).conedges.values().iterator();
+
+        // for (Node n : Nodeslist) {
+        //    if(n.getKey()==node_id){
+        //        Iterator it = n.conedges.values().iterator();
+                        //.connectededges.iterator();
+        return it ;
+
     }
 
     @Override
     public NodeData removeNode(int key) {
         nodes=true;
-        Node ans = null;
-        for (Node n : this.Nodeslist) {
-            if(n.getKey()==key){
-                Nodeslist.remove(n);
-                ans=n;
-            }
-        }
+        Node ans = all.get(key);
+        all.remove(key);
+//        for (Node n : this.Nodeslist) {
+//            if(n.getKey()==key){
+//                Nodeslist.remove(n);
+//                ans=n;
+//            }
+//        }
         return ans;
     }
 
     @Override
     public EdgeData removeEdge(int src, int dest) {
         edges=true;
-        return null;
+       Edge r = all.get(src).conedges.get(dest);
+        numofedges--;
+        all.get(src).conedges.remove(dest);
+        return r;
     }
 
     @Override
     public int nodeSize() {
-        return Nodeslist.size();
+        return all.size();
     }
 
     @Override
     public int edgeSize() {
-        return Edges.size();
+        int ans =0;
+        Iterator t =all.values().iterator();
+        while(t.hasNext()){
+            Node me = (Node)t.next();
+            ans+=me.s;
+        }
+return ans;
     }
 
     @Override

@@ -1,7 +1,5 @@
 package api;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Node implements NodeData {
 
@@ -9,16 +7,15 @@ public class Node implements NodeData {
     private int id ;
     private int Tag = 0;
     private double weight = 0 ;
-    List<EdgeData> connectededges = new ArrayList<>();
-
+   // List<EdgeData> connectededges = new ArrayList<>();
+    HashMap <Integer,Edge> conedges = new HashMap<Integer, Edge>();
+     int s = conedges.size();
 
     public Node(GeoLocation g , int id){
         this.geo = new GeoLocation_(g) ;
         this.id = id ;
 
     }
-
-
 
 
 
