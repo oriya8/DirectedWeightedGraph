@@ -8,14 +8,11 @@ import java.io.FileReader;
 import java.util.*;
 
 public class DirectedWeightedGraph_ implements DirectedWeightedGraph {
-  // static List<Edge> Edges = new ArrayList<>();
-//   static List<Node> Nodeslist = new ArrayList<>();
-   // Node [] answer;
   HashMap <Integer,Node> all = new HashMap <Integer, Node>();
     HashMap <Integer,HashMap <Integer,Edge>> big = new HashMap<Integer,HashMap <Integer,Edge>>();
     HashMap <String,Edge> allofed = new HashMap<String,Edge>();
 
-  private int numofedges = 0;
+  //private int numofedges = 0;
 private int mc=0;
 boolean nodes=false;
 boolean edges = false;
@@ -58,7 +55,6 @@ boolean edges = false;
             Edges.add(e);
         }
 
-            //int allin = 0;
             for(int index=0;index< Nodeslist.size();index++){
                 HashMap<Integer, Edge> little = new HashMap<Integer, Edge>();
                 for(Edge ed :Edges){
@@ -68,7 +64,6 @@ boolean edges = false;
                         String des= String.valueOf(ed.getDest());
                         String k = src+","+des;
                         allofed.put(k,ed);
-                        //allin++;
                     }
                 }
                 System.out.println("l"+little.size());
@@ -78,16 +73,9 @@ boolean edges = false;
             System.out.println("b"+big.size());
             System.out.println("\n");
             System.out.println("all"+allofed.size());
-           // Iterator t = allofed.values().iterator();
-//            for (Node s : Nodeslist){
-//                s.conedges.put(dest,e);
-//            }
+
         }
-//
-//        numofedges=Edges.size();
-//        for (Node d : Nodeslist) {
-//            this.all.put(d.getKey(),d);
-//        }
+
 
 
 
@@ -96,30 +84,17 @@ boolean edges = false;
     @Override
     public NodeData getNode(int key) {
         return all.get(key);
-//        for (Node n : this.Nodeslist) {
-//            if(n.getKey()==key){
-//                return n;
-//            }
-//        }
     }
 
     @Override
     public EdgeData getEdge(int src, int dest) {
         return big.get(src).get(dest);
-       // return all.get(src).conedges.get(dest);
-//        for (Edge e : Edges) {
-//            if( e.getSrc()==src && e.getDest()==dest){
-//                return e;
-//            }
-//        }
-        //return null;
     }
 
     @Override
     public void addNode(NodeData n) {
         Node adding = new Node(n.getLocation(),n.getKey());
         all.put(n.getKey(), adding);
- //   Nodeslist.add(adding);
     this.nodes=true;
     mc++;
     }
@@ -130,23 +105,20 @@ boolean edges = false;
     if(big.containsKey(src)){
         if(!big.get(src).containsKey(dest)){
             big.get(src).put(dest,adding);
+            String sr=String.valueOf(src);
+            String de=String.valueOf(dest);
+            String specific = sr+","+de;
+            allofed.put(specific,adding);
         }
     }
-   // all.get(src).conedges.put(dest,adding);
-    numofedges++;
+   // numofedges++;
    // Edges.add(adding);
         mc++;
     this.edges= true;
-
     }
 
     @Override
     public Iterator<NodeData> nodeIter() {
-//    try {
-////        List<NodeData> nodedata = new ArrayList<>();
-////        for (Node n : this.Nodeslist) {
-////            Node adding = new Node(n.getLocation(), n.getKey());
-////            nodedata.add(adding);
         if(edges == true || nodes == true){
             throw new RuntimeException();}
          Iterator it = all.values().iterator();
@@ -157,13 +129,9 @@ boolean edges = false;
     @Override
     public Iterator<EdgeData> edgeIter() {
         Iterator t = allofed.values().iterator();
-
-
         if(edges == true){
-                      throw new RuntimeException();}
-
+            throw new RuntimeException();}
         return t;
-
     }
 
     @Override
@@ -171,12 +139,6 @@ boolean edges = false;
         if(edges == true || nodes == true){
             throw new RuntimeException();}
         Iterator it=big.get(node_id).values().iterator();
-        //Iterator it = all.get(node_id).conedges.values().iterator();
-
-        // for (Node n : Nodeslist) {
-        //    if(n.getKey()==node_id){
-        //        Iterator it = n.conedges.values().iterator();
-                        //.connectededges.iterator();
         return it ;
 
     }
@@ -186,12 +148,6 @@ boolean edges = false;
         nodes=true;
         Node ans = all.get(key);
         all.remove(key);
-//        for (Node n : this.Nodeslist) {
-//            if(n.getKey()==key){
-//                Nodeslist.remove(n);
-//                ans=n;
-//            }
-//        }
         return ans;
     }
 
@@ -209,9 +165,7 @@ boolean edges = false;
         String de=String.valueOf(dest);
         String specific = sr+","+de;
         allofed.remove(specific);
-      // Edge r = all.get(src).conedges.get(dest);
-        numofedges--;
-       // all.get(src).conedges.remove(dest);
+       /// numofedges--;
         return r;
     }
 
@@ -222,12 +176,6 @@ boolean edges = false;
 
     @Override
     public int edgeSize() {
-//        int ans =0;
-//        Iterator t =all.values().iterator();
-//        while(t.hasNext()){
-//            Node me = (Node)t.next();
-//            ans+=me.s;
-//        }
 return allofed.size();
     }
 
