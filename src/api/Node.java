@@ -19,6 +19,15 @@ public class Node implements NodeData {
     }
 
 
+    @Override
+    public String toString() {
+        return "Node{" +
+                "geo=" + geo +
+                ", id=" + id +
+                ", Tag=" + Tag +
+                ", weight=" + weight +
+                '}';
+    }
 
     @Override
     public int getKey() {

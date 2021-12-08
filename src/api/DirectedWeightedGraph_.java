@@ -9,13 +9,17 @@ import java.util.*;
 
 public class DirectedWeightedGraph_ implements DirectedWeightedGraph {
   HashMap <Integer,Node> all = new HashMap <Integer, Node>();
-    HashMap <Integer,HashMap <Integer,Edge>> big = new HashMap<Integer,HashMap <Integer,Edge>>();
-    HashMap <String,Edge> allofed = new HashMap<String,Edge>();
+  HashMap <Integer,HashMap <Integer,Edge>> big = new HashMap<Integer,HashMap <Integer,Edge>>();
+  HashMap <String,Edge> allofed = new HashMap<String,Edge>();
+    private int mc=0;
+    boolean nodes=false;
+    boolean edges = false;
 
-  //private int numofedges = 0;
-private int mc=0;
-boolean nodes=false;
-boolean edges = false;
+    public DirectedWeightedGraph_() {
+        this.all = new HashMap <Integer, Node>();;
+        this.big =  new HashMap<Integer,HashMap <Integer,Edge>>();
+        this.allofed = new HashMap<String,Edge>();
+    }
 
     public DirectedWeightedGraph_(String path) throws FileNotFoundException {
         File input = new File(path);
@@ -38,13 +42,16 @@ boolean edges = false;
             int id = nd.get("id").getAsInt();
             Node node = new Node(pos, id);
             Nodeslist.add(node);
-
+        }
+        for (Node s : Nodeslist){
+               all.put(s.getKey(),s);
         }
 
         for (Node n : Nodeslist) {
             n.getInfo();
             System.out.println(n.getInfo());
         }
+
         JsonArray arrOfEdges = fileoObject.get("Edges").getAsJsonArray();
         for (JsonElement i : arrOfEdges) {
             JsonObject ed = i.getAsJsonObject();
@@ -67,7 +74,6 @@ boolean edges = false;
                     }
                 }
                 System.out.println("l"+little.size());
-
                 big.put(index,little);
             }
             System.out.println("b"+big.size());
@@ -111,8 +117,6 @@ boolean edges = false;
             allofed.put(specific,adding);
         }
     }
-   // numofedges++;
-   // Edges.add(adding);
         mc++;
     this.edges= true;
     }

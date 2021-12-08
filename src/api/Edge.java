@@ -8,6 +8,7 @@ public class Edge implements EdgeData {
     private int src, dest;
     private double weight;
     private int tag;
+    private String info;
 
 
     public Edge(int s, double w, int d) {
@@ -16,6 +17,14 @@ public class Edge implements EdgeData {
         this.dest = d;
         this.weight = w;
 
+    }
+
+    public Edge(int src, int dest, double weight, int tag, String info) {
+        this.src = src;
+        this.dest = dest;
+        this.weight = weight;
+        this.tag = tag;
+        this.info = info;
     }
 
 
@@ -36,17 +45,13 @@ public class Edge implements EdgeData {
 
     @Override
     public String getInfo() {
-        return "Edge{" +
-                "src=" + src +
-                ", weight=" + weight +
-                ", dest=" + dest +
-                '}';
+        return info;
     }
 
     @Override
     public void setInfo(String s) {
-
-        String[] arr = new String[3];
+        this.info = s;
+/*        String[] arr = new String[3];
         Map<String, String> myMap = new HashMap<String, String>();
         String[] pairs = s.split(",");
         for (int i = 0; i < pairs.length; i++) {
@@ -63,7 +68,7 @@ public class Edge implements EdgeData {
         }
         this.dest = Integer.parseInt(arr[0]);
         this.weight = Double.parseDouble(arr[2]);
-        this.src = Integer.parseInt(arr[1]);
+        this.src = Integer.parseInt(arr[1]);*/
 
     }
 

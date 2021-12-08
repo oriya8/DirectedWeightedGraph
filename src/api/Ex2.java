@@ -13,7 +13,7 @@ import java.util.*;
 
 
 public class Ex2 {
-int g = 4;
+   // private DirectedWeightedGraph j;
         /**
          * This static function will be used to test your implementation
          * @param json_file - a json file (e.g., G1.json - G3
@@ -24,34 +24,14 @@ int g = 4;
             DirectedWeightedGraph ans = null;
            // json_file = "data\\G1.json";
             DirectedWeightedGraph_ kkk = new DirectedWeightedGraph_(json_file);
-          //  Set entrySet = kkk.getNode(2).getInfo();
-            //        conedges.entrySet();
-
-            // System.out.print("kkk.all");
-//            Set entrySet = conedges.entrySet();
-//            Iterator it = entrySet.iterator();
-//
-//            while(it.hasNext()){
-//                Map.Entry me = (Map.Entry)r.next();
-//                System.out.print(me.getKey());
-//
-//                System.out.print(me.getValue());
-//            }
-         //   System.out.print(kkk.all.values().);
-           // System.out.print(
-            //       Iterator r =kkk.edgeIter();
-//            while(r.hasNext()){
-//                Edge me = (Edge)r.next();
-//                 System.out.print(me.getInfo());
-//            }
-            //);
-//            HashMap<Integer,Node> all = new HashMap <Integer, Node>();
-          //      Iterator r =kkk.nodeIter();
-//
-////                       while(r.hasNext()){
-////                 System.out.print(r.);
-//
-
+            DirectedWeightedGraphAlgorithms an = new DirectedWeightedGraphAlgorithms_(kkk);
+            List<NodeData> l = new LinkedList<>();
+            Iterator<NodeData> n = an.getGraph().nodeIter();
+            while (n.hasNext()) {
+                NodeData e = n.next();
+                l.add(e);
+            }
+            an.tsp(l);
 
             return kkk;
         }
