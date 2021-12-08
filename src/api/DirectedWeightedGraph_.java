@@ -13,7 +13,7 @@ public class DirectedWeightedGraph_ implements DirectedWeightedGraph {
    // Node [] answer;
   HashMap <Integer,Node> all = new HashMap <Integer, Node>();
     HashMap <Integer,HashMap <Integer,Edge>> big = new HashMap<Integer,HashMap <Integer,Edge>>();
-    HashMap <Integer,Edge> allofed = new HashMap<Integer,Edge>();
+    HashMap <String,Edge> allofed = new HashMap<String,Edge>();
 
   private int numofedges = 0;
 private int mc=0;
@@ -58,14 +58,17 @@ boolean edges = false;
             Edges.add(e);
         }
 
-            int allin = 0;
+            //int allin = 0;
             for(int index=0;index< Nodeslist.size();index++){
                 HashMap<Integer, Edge> little = new HashMap<Integer, Edge>();
                 for(Edge ed :Edges){
                     if (ed.getSrc()==index){
                         little.put(ed.getDest(),ed);
-                        allofed.put(allin,ed);
-                        allin++;
+                        String src= String.valueOf(ed.getSrc());
+                        String des= String.valueOf(ed.getDest());
+                        String k = src+","+des;
+                        allofed.put(k,ed);
+                        //allin++;
                     }
                 }
                 System.out.println("l"+little.size());
@@ -202,7 +205,10 @@ boolean edges = false;
                 big.get(src).remove(dest);
             }
         }
-        allofed.values().remove(r);
+        String sr=String.valueOf(src);
+        String de=String.valueOf(dest);
+        String specific = sr+","+de;
+        allofed.remove(specific);
       // Edge r = all.get(src).conedges.get(dest);
         numofedges--;
        // all.get(src).conedges.remove(dest);
