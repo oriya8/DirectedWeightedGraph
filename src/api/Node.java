@@ -8,8 +8,9 @@ public class Node implements NodeData {
     private int Tag = 0;
     private double weight = 0 ;
    // List<EdgeData> connectededges = new ArrayList<>();
-    HashMap <Integer,Edge> conedges = new HashMap<Integer, Edge>();
-     int s = conedges.size();
+   // HashMap <Integer,Edge> conedges = new HashMap<Integer, Edge>();
+
+   //  int s = conedges.size();
 
     public Node(GeoLocation g , int id){
         this.geo = new GeoLocation_(g) ;

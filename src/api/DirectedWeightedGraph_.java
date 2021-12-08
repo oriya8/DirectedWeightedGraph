@@ -12,8 +12,11 @@ public class DirectedWeightedGraph_ implements DirectedWeightedGraph {
 //   static List<Node> Nodeslist = new ArrayList<>();
    // Node [] answer;
   HashMap <Integer,Node> all = new HashMap <Integer, Node>();
-  int numofedges = 0;
+    HashMap <Integer,HashMap <Integer,Edge>> big = new HashMap<Integer,HashMap <Integer,Edge>>();
+    HashMap <Integer,Edge> allofed = new HashMap<Integer,Edge>();
 
+  private int numofedges = 0;
+private int mc=0;
 boolean nodes=false;
 boolean edges = false;
 
@@ -21,12 +24,10 @@ boolean edges = false;
         File input = new File(path);
         JsonElement fileElement = JsonParser.parseReader(new FileReader(input));
         JsonObject fileoObject = fileElement.getAsJsonObject();
-        //fileoObject.
 
         List<Edge> Edges = new ArrayList<>();
         List<Node> Nodeslist = new ArrayList<>();
         JsonArray arrOfNodes = fileoObject.get("Nodes").getAsJsonArray();
-        //List<Node> Nodeslist = new ArrayList<>();
         for (JsonElement i : arrOfNodes) {
             JsonObject nd = i.getAsJsonObject();
             String l = nd.get("pos").getAsString();
@@ -42,18 +43,12 @@ boolean edges = false;
             Nodeslist.add(node);
 
         }
-      //  Map<Integer,Edge> conedges = new HashMap<Integer, Edge>();
-      //  Map <Integer,HashMap> all = new HashMap <Integer, HashMap>();
-//
-//        Node [] answer = new Node[Nodeslist.size()];
-//        for(Node r : Nodeslist){
-//            int id = r.getKey();
-//            answer[id]=r;
-//        }
 
-
+        for (Node n : Nodeslist) {
+            n.getInfo();
+            System.out.println(n.getInfo());
+        }
         JsonArray arrOfEdges = fileoObject.get("Edges").getAsJsonArray();
-        // List<Edge> Edges = new ArrayList<>();
         for (JsonElement i : arrOfEdges) {
             JsonObject ed = i.getAsJsonObject();
             int src = ed.get("src").getAsInt();
@@ -61,41 +56,37 @@ boolean edges = false;
             int dest = ed.get("dest").getAsInt();
             Edge e = new Edge(src, w, dest);
             Edges.add(e);
-            //conedges.put(dest,e);
-           // all.put(src,);
-            for (Node s : Nodeslist){
-                s.conedges.put(dest,e);
+        }
+
+            int allin = 0;
+            for(int index=0;index< Nodeslist.size();index++){
+                HashMap<Integer, Edge> little = new HashMap<Integer, Edge>();
+                for(Edge ed :Edges){
+                    if (ed.getSrc()==index){
+                        little.put(ed.getDest(),ed);
+                        allofed.put(allin,ed);
+                        allin++;
+                    }
+                }
+                System.out.println("l"+little.size());
+
+                big.put(index,little);
             }
-            //Nodeslist.conedges
-            System.out.println(e.getInfo());
-            System.out.println(" ");
-
+            System.out.println("b"+big.size());
+            System.out.println("\n");
+            System.out.println("all"+allofed.size());
+           // Iterator t = allofed.values().iterator();
+//            for (Node s : Nodeslist){
+//                s.conedges.put(dest,e);
+//            }
         }
-        numofedges=Edges.size();
-        //HashMap <Integer,Node> all = new HashMap <Integer, Node>();
-        for (Node d : Nodeslist) {
-            this.all.put(d.getKey(),d);
-        }
-
-        for (Node n : Nodeslist) {
-            n.getInfo();
-            System.out.println(n.getInfo());
-        }
-    }
-
-//    public Node [] bobbuilder (){
 //
-//
-//
-//        for(Edge ed : this.Edges){
-//           int loca = ed.getSrc();
-//           answer[loca].connectededges.add(ed);
+//        numofedges=Edges.size();
+//        for (Node d : Nodeslist) {
+//            this.all.put(d.getKey(),d);
 //        }
-//
-//
-//
-//        return answer;
-//    }
+
+
 
 
 
@@ -111,7 +102,8 @@ boolean edges = false;
 
     @Override
     public EdgeData getEdge(int src, int dest) {
-        return all.get(src).conedges.get(dest);
+        return big.get(src).get(dest);
+       // return all.get(src).conedges.get(dest);
 //        for (Edge e : Edges) {
 //            if( e.getSrc()==src && e.getDest()==dest){
 //                return e;
@@ -122,20 +114,27 @@ boolean edges = false;
 
     @Override
     public void addNode(NodeData n) {
-
         Node adding = new Node(n.getLocation(),n.getKey());
         all.put(n.getKey(), adding);
  //   Nodeslist.add(adding);
     this.nodes=true;
+    mc++;
     }
 
     @Override
     public void connect(int src, int dest, double w) {
     Edge adding = new Edge(src,w,dest);
-    all.get(src).conedges.put(dest,adding);
+    if(big.containsKey(src)){
+        if(!big.get(src).containsKey(dest)){
+            big.get(src).put(dest,adding);
+        }
+    }
+   // all.get(src).conedges.put(dest,adding);
     numofedges++;
    // Edges.add(adding);
+        mc++;
     this.edges= true;
+
     }
 
     @Override
@@ -154,26 +153,22 @@ boolean edges = false;
 
     @Override
     public Iterator<EdgeData> edgeIter() {
+        Iterator t = allofed.values().iterator();
+
+
         if(edges == true){
-            throw new RuntimeException();}
-        Set entrySet = all.entrySet();
-        Iterator fin = null;
-        Iterator it = entrySet.iterator();
+                      throw new RuntimeException();}
 
-        System.out.println("HashMap Key-Value Pairs : ");
-        while(it.hasNext()){
-            Node me = (Node)it.next();
-            fin = me.conedges.values().iterator();
-       }
+        return t;
 
-        return fin;
     }
 
     @Override
     public Iterator<EdgeData> edgeIter(int node_id) {
         if(edges == true || nodes == true){
             throw new RuntimeException();}
-        Iterator it = all.get(node_id).conedges.values().iterator();
+        Iterator it=big.get(node_id).values().iterator();
+        //Iterator it = all.get(node_id).conedges.values().iterator();
 
         // for (Node n : Nodeslist) {
         //    if(n.getKey()==node_id){
@@ -200,9 +195,17 @@ boolean edges = false;
     @Override
     public EdgeData removeEdge(int src, int dest) {
         edges=true;
-       Edge r = all.get(src).conedges.get(dest);
+        Edge r=null;
+        if(big.containsKey(src)){
+            if(big.get(src).containsKey(dest)){
+                r=big.get(src).get(dest);
+                big.get(src).remove(dest);
+            }
+        }
+        allofed.values().remove(r);
+      // Edge r = all.get(src).conedges.get(dest);
         numofedges--;
-        all.get(src).conedges.remove(dest);
+       // all.get(src).conedges.remove(dest);
         return r;
     }
 
@@ -213,18 +216,18 @@ boolean edges = false;
 
     @Override
     public int edgeSize() {
-        int ans =0;
-        Iterator t =all.values().iterator();
-        while(t.hasNext()){
-            Node me = (Node)t.next();
-            ans+=me.s;
-        }
-return ans;
+//        int ans =0;
+//        Iterator t =all.values().iterator();
+//        while(t.hasNext()){
+//            Node me = (Node)t.next();
+//            ans+=me.s;
+//        }
+return allofed.size();
     }
 
     @Override
     public int getMC() {
-        return 0;
+        return mc;
     }
 
 }
