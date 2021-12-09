@@ -124,6 +124,8 @@ public class DirectedWeightedGraph_ implements DirectedWeightedGraph {
     @Override
     public Iterator<NodeData> nodeIter() {
         if(edges == true || nodes == true){
+
+
             throw new RuntimeException();}
          Iterator it = all.values().iterator();
         return it;

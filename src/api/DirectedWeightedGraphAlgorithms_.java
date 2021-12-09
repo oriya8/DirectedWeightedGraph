@@ -1,6 +1,7 @@
 package api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -61,41 +62,37 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
-        DirectedWeightedGraph newone = copy();
-        newone.nodeIter().remove();
-        newone.addNode((NodeData) cities.iterator());
         ArrayList<NodeData>anssss= new ArrayList<NodeData>();
-
-        for(int i=0;i<cities.size();i++){
-            Iterator re =newone.edgeIter(i);
-            Iterator c = cities.iterator();
-            anssss=rec(newone,cities,(NodeData) c.next(),re,anssss);
-            ;;}
+        for (NodeData in :cities){
+            Iterator re =g.edgeIter(in.getKey());
+            anssss=rec(cities,in,re,anssss);
+        }
+        System.out.print("anssss"+"\n");
         System.out.print(anssss);
-        return null;
+        return anssss;
     }
 
-    public ArrayList<NodeData> rec (DirectedWeightedGraph newone,List<NodeData> cities,NodeData n, Iterator t, ArrayList<NodeData> good){
+    public ArrayList<NodeData> rec (List<NodeData> cities,NodeData n, Iterator t, ArrayList<NodeData> good){
         if(good.size()==cities.size()){
+            System.out.println("**");
             return good;
         }
-        System.out.println("**");
         System.out.println("*");
-
         while (t.hasNext()) {
-            EdgeData g = (EdgeData)t.next();
-            int nod = g.getDest();
-            NodeData check = cities.get(nod);
-            if(good.contains(check)){
+            EdgeData gk = (EdgeData)t.next();
+            int nod = gk.getDest();
+            NodeData is = g.getNode(nod);
+            if (!cities.contains(is)){
                 continue;
             }
-            good.add(check);
-            Iterator a = newone.edgeIter(nod);
-
-            rec(newone,cities,check,a,good);
+            if(good.contains(is)){
+                continue;
+            }
+            good.add(is);
+            Iterator a = this.g.edgeIter(nod);
+            rec(cities,is,a,good);
             if(good.size()== cities.size()){
                 return good;}
-
         }
         if(good.contains(n)){
             good.remove(n);

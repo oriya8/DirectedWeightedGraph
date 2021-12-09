@@ -19,6 +19,13 @@ public class Edge implements EdgeData {
 
     }
 
+
+
+    public Edge copy() {
+        return new Edge(this.src,this.weight,this.dest);
+
+    }
+
     public Edge(int src, int dest, double weight, int tag, String info) {
         this.src = src;
         this.dest = dest;
