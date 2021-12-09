@@ -41,8 +41,16 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
 
     @Override
     public boolean isConnected() {
+        ArrayList<NodeData>anssss= new ArrayList<NodeData>();
+        Iterator<NodeData> r = g.nodeIter();
+        while (r.hasNext()){
+            NodeData in = r.next();
+            Iterator re =g.edgeIter(in.getKey());
+            NodeData a =isconnrec(in,re,anssss);
+            System.out.print("\n"+a);
 
-        return false;
+        }
+        return true;
     }
 
     @Override
@@ -55,6 +63,28 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         return null;
     }
 
+
+
+    public NodeData isconnrec (NodeData n, Iterator t, ArrayList<NodeData> good){
+        if(good.size()==g.nodeSize()){
+            System.out.print("\n"+"n:"+n);
+            return n;
+        }
+        while (t.hasNext()) {
+            EdgeData gk = (EdgeData)t.next();
+            int nod = gk.getDest();
+            NodeData is = g.getNode(nod);
+            if(good.contains(is)){
+                continue;
+            }
+            good.add(is);
+            Iterator a = this.g.edgeIter(nod);
+            isconnrec(is,a,good);
+            if(good.size()==g.nodeSize()){
+                return n;}
+        }
+        return n;
+    }
     @Override
     public NodeData center() {
         return null;
@@ -63,21 +93,45 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
         ArrayList<NodeData>anssss= new ArrayList<NodeData>();
+        ArrayList<NodeData>fin= new ArrayList<NodeData>();
+
+        double min=Double.MAX_VALUE;
+        double isit =0;
         for (NodeData in :cities){
             Iterator re =g.edgeIter(in.getKey());
+            anssss.clear();
             anssss=rec(cities,in,re,anssss);
+            isit=minweight(anssss);
+            if(isit<min){
+                min=isit;
+                fin.clear();
+                fin.addAll(anssss);
+            }
         }
-        System.out.print("anssss"+"\n");
-        System.out.print(anssss);
-        return anssss;
+        return fin;
+    }
+
+
+
+    public double minweight (ArrayList<NodeData> ansss){
+      //  NodeData [] a = new NodeData[anss]
+        double sum=0;
+        for (int i=0;i<ansss.size()-1;i++){
+           EdgeData v= this.g.getEdge( ansss.get(i).getKey(),ansss.get(i+1).getKey());
+         sum+=v.getWeight();
+        }
+        return sum;
+
+
+
     }
 
     public ArrayList<NodeData> rec (List<NodeData> cities,NodeData n, Iterator t, ArrayList<NodeData> good){
         if(good.size()==cities.size()){
-            System.out.println("**");
+           // System.out.println("**");
             return good;
         }
-        System.out.println("*");
+      //  System.out.println("*");
         while (t.hasNext()) {
             EdgeData gk = (EdgeData)t.next();
             int nod = gk.getDest();
@@ -97,7 +151,7 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         if(good.contains(n)){
             good.remove(n);
         }
-        System.out.print(good);
+     //   System.out.print(good);
         return good;
     }
     @Override

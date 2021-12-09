@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) throws FileNotFoundException {
-        Ex2.getGrapg("data\\G2.json");
+        Ex2.getGrapg("data\\G1.json");
 //        DirectedWeightedGraph kkk = new DirectedWeightedGraph_("data\\G1.json");
 //        File input = new File("data\\G1.json");
 
