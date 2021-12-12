@@ -60,8 +60,63 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
 
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
+
+
+
+
+
+
+
+
+
+
         return null;
     }
+
+
+
+//
+//    public Double shortttt (NodeData n, Iterator t, ArrayList<NodeData> route,NodeData des){
+//        if(n.getKey()==des.getKey()){
+//            // System.out.println("**");
+//            return  ;
+//        }
+//        //  System.out.println("*");
+//        while (t.hasNext()) {
+//            EdgeData gk = (EdgeData)t.next();
+//            int nod = gk.getDest();
+//            NodeData is = g.getNode(nod);
+//            if(route.contains(is)){
+//                continue;
+//            }
+//            route.add(is);
+//            Iterator a = this.g.edgeIter(nod);
+//            rec(cities,is,a,good);
+//            if(good.size()== cities.size()){
+//                return good;}
+//        }
+//        if(good.contains(n)){
+//            good.remove(n);
+//        }
+//        //   System.out.print(good);
+//        return good;
+//    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -87,8 +142,74 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
     }
     @Override
     public NodeData center() {
-        return null;
+        HashMap <NodeData,Integer> change = new HashMap <NodeData,Integer>();
+        HashMap <Integer,NodeData> change2 = new HashMap <>();
+        Iterator<NodeData> t = g.nodeIter();
+        int ind=0;
+        while(t.hasNext()){
+            NodeData tt = t.next();
+            change.put(tt,ind);
+            change2.put(ind,tt);
+            ind++;
+        }
+        double inf = Double.MAX_VALUE;
+        double [][] s = new double [g.nodeSize()][g.nodeSize()];
+        for (int i=0;i<s.length;i++){
+            for(int j=0;j<s.length;j++){
+              if (i==j) {
+                  s[i][j] = Double.valueOf(0);
+              }
+              else{
+                  s[i][j]=inf;
+              }
+            }
+        }
+        Iterator<EdgeData> l= g.edgeIter();
+        while(l.hasNext()){
+            EdgeData egg = l.next();
+            int src = egg.getSrc();
+            int des= egg.getDest();
+            NodeData na = g.getNode(src);
+            NodeData da = g.getNode(des);
+            s[change.get(na)][change.get(da)]=egg.getWeight();
+        }
+
+            for (int k = 0; k < s.length; k++) {
+                for (int i = 0; i < s.length; i++) {
+                    for (int j = 0; j < s.length; j++) {
+                        if (s[i][k] == inf || s[k][j] == inf || j == k || i == j || i == k ) {
+                            continue;
+                        }
+                        s[i][j] = Math.min(s[i][j],s[i][k]+s[k][j]);
+                    }
+                }
+            }
+        double [] result = new double[s.length];
+        for (int i=0;i<s.length;i++){
+            double max = 0;
+        for(int j=0;j<s.length;j++){
+            if(max < s[i][j]) {
+                max= s[i][j];}
+            }
+            result[i]= max;
+        }
+        double ans =Double.MAX_VALUE;
+        int indexnode = 0;
+		for (int i = 0; i < result.length; i++) {
+			if (result[i] < ans) {
+				ans = result[i];
+                indexnode=i;
+			}
+		}
+        return change2.get(indexnode);
     }
+
+
+
+
+
+
+
 
     @Override
     public List<NodeData> tsp(List<NodeData> cities) {
