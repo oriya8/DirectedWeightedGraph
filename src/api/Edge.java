@@ -52,7 +52,7 @@ public class Edge implements EdgeData {
 
     @Override
     public String getInfo() {
-        return info;
+        return this.info;
     }
 
     @Override

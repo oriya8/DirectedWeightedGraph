@@ -1,9 +1,6 @@
 package api;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAlgorithms {
     private DirectedWeightedGraph g;
@@ -39,23 +36,120 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         return p;
     }
 
+//    private boolean checkLonely(){
+//
+//        for (int i = 0; i < this.g.edgeSize(); i++) {
+//
+//            if (this.g.g == null){
+//                return true ;
+//            }
+//        }
+//        return false ;
+//
+//    }
+
     @Override
     public boolean isConnected() {
-        ArrayList<NodeData>anssss= new ArrayList<NodeData>();
-        Iterator<NodeData> r = g.nodeIter();
-        while (r.hasNext()){
-            NodeData in = r.next();
-            Iterator re =g.edgeIter(in.getKey());
-            NodeData a =isconnrec(in,re,anssss);
-            System.out.print("\n"+a);
-
+        Iterator<NodeData> iter = this.g.nodeIter();
+        while (iter.hasNext()) {
+            NodeData ne = iter.next();
+            ne.setTag(0);
         }
-        return true;
-    }
+            if (this.g == null) {
+                return true;
+            }
+            if (this.g != null && this.g.nodeSize() == 0) {
+                return true;
+            }
+            if (this.g != null && this.g.nodeSize() == 1) {
+                return true;
+            }
+//
+//            if (checkLonely()){
+//                return false ;
+//            }
+
+            int counter = 0 ;
+            Queue<NodeData> que = new LinkedList<>();
+            que.add(this.g.nodeIter().next());
+            NodeData n = que.peek();
+            n.setTag(0);
+
+            while (!que.isEmpty()) {
+                n = que.poll();
+                counter++;
+
+                Iterator it = this.g.edgeIter(n.getKey());
+                while (it.hasNext()) {
+                    EdgeData edge = (Edge) it.next();
+                    NodeData dest =  g.getNode(edge.getDest());
+                    if (dest.getTag() == -1) {
+                        if (!havePath(dest.getKey(), n.getKey())) {
+                            return false;
+                        }
+                        dest.setTag(0);
+                        que.add(dest);
+                    }
+                }
+            }
+            return g.edgeSize() == counter;
+        }
+
+
+        public boolean havePath(int src, int dest) {
+            Stack<NodeData> st = new Stack<>();
+            NodeData temp = g.getNode(src);
+            HashSet<Integer> visited = new HashSet<>();
+            visited.add(src);
+            st.add(temp);
+            while (!st.empty()) {
+                temp = st.pop();
+                Iterator tor = this.g.edgeIter(temp.getKey());
+                while (tor.hasNext()) {
+                    EdgeData cur = (Edge)tor.next();
+                    NodeData next = g.getNode(cur.getDest());
+                    if (!visited.contains(next.getKey())) {
+                        visited.add(next.getKey());
+                        st.add(next);
+                    }
+                    if (next.getKey() == dest)
+                        return true;
+                }
+            }
+            return false;
+        }
+
+
+
 
     @Override
     public double shortestPathDist(int src, int dest) {
-        return 0;
+        int max = Integer.MAX_VALUE;
+        Iterator<NodeData> iter = this.g.nodeIter();
+        while (iter.hasNext()) {
+            NodeData ne = iter.next();
+            ne.setWeight(max);
+            ne.setTag(0);
+            ne.setInfo("-1");
+        }
+        NodeData from = g.getNode(src);
+        from.setWeight(0);
+        PriorityQueue<NodeData> tor = new PriorityQueue<NodeData>(new Comparator<NodeData>() {
+            public int compare(NodeData one, NodeData two) {
+                if(one.getWeight()<two.getWeight()) {
+                    return 1;}
+                else {
+                    return -1;
+                }
+            }
+        });
+        tor.add(from);
+        help(tor);
+        NodeData destination= g.getNode(dest);
+        if(destination.getWeight()==max){
+            return -1;
+        }
+        return destination.getWeight();
     }
 
     @Override
@@ -75,71 +169,29 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
 
 
 
-//
-//    public Double shortttt (NodeData n, Iterator t, ArrayList<NodeData> route,NodeData des){
-//        if(n.getKey()==des.getKey()){
-//            // System.out.println("**");
-//            return  ;
-//        }
-//        //  System.out.println("*");
-//        while (t.hasNext()) {
-//            EdgeData gk = (EdgeData)t.next();
-//            int nod = gk.getDest();
-//            NodeData is = g.getNode(nod);
-//            if(route.contains(is)){
-//                continue;
-//            }
-//            route.add(is);
-//            Iterator a = this.g.edgeIter(nod);
-//            rec(cities,is,a,good);
-//            if(good.size()== cities.size()){
-//                return good;}
-//        }
-//        if(good.contains(n)){
-//            good.remove(n);
-//        }
-//        //   System.out.print(good);
-//        return good;
-//    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    public NodeData isconnrec (NodeData n, Iterator t, ArrayList<NodeData> good){
-        if(good.size()==g.nodeSize()){
-            System.out.print("\n"+"n:"+n);
-            return n;
-        }
-        while (t.hasNext()) {
-            EdgeData gk = (EdgeData)t.next();
-            int nod = gk.getDest();
-            NodeData is = g.getNode(nod);
-            if(good.contains(is)){
-                continue;
+    private void help(PriorityQueue tor){
+        while(!tor.isEmpty()){
+            NodeData pull = (NodeData) tor.poll();
+            Iterator<EdgeData> over = g.edgeIter(pull.getKey());
+            while (over.hasNext()){
+                EdgeData edge = over.next();
+                NodeData end = g.getNode(edge.getDest());
+                double w=edge.getWeight()+pull.getWeight();
+                if(pull.getTag()!=1 && w<end.getWeight()){
+                    end.setWeight(w);
+                    end.setInfo(String.valueOf(pull.getKey()));
+                    tor.add(end);
+                }
             }
-            good.add(is);
-            Iterator a = this.g.edgeIter(nod);
-            isconnrec(is,a,good);
-            if(good.size()==g.nodeSize()){
-                return n;}
+            pull.setTag(1);
         }
-        return n;
     }
+
+
+
+
+
+
     @Override
     public NodeData center() {
         HashMap <NodeData,Integer> change = new HashMap <NodeData,Integer>();
@@ -222,6 +274,7 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
             Iterator re =g.edgeIter(in.getKey());
             anssss.clear();
             anssss=rec(cities,in,re,anssss);
+            System.out.println(anssss);
             isit=minweight(anssss);
             if(isit<min){
                 min=isit;
@@ -235,16 +288,12 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
 
 
     public double minweight (ArrayList<NodeData> ansss){
-      //  NodeData [] a = new NodeData[anss]
         double sum=0;
         for (int i=0;i<ansss.size()-1;i++){
            EdgeData v= this.g.getEdge( ansss.get(i).getKey(),ansss.get(i+1).getKey());
          sum+=v.getWeight();
         }
         return sum;
-
-
-
     }
 
     public ArrayList<NodeData> rec (List<NodeData> cities,NodeData n, Iterator t, ArrayList<NodeData> good){

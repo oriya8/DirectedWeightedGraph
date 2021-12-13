@@ -7,6 +7,7 @@ public class Node implements NodeData {
     private int id ;
     private int Tag = 0;
     private double weight = 0 ;
+    private String info="";
    // List<EdgeData> connectededges = new ArrayList<>();
    // HashMap <Integer,Edge> conedges = new HashMap<Integer, Edge>();
 
@@ -62,17 +63,12 @@ public class Node implements NodeData {
 
     @Override
     public String getInfo() {
-        return "Node{" +
-                "geo=" + geo +
-                ", id=" + id +
-                ", w=" + weight +
-                " tag=" + Tag +
-                '}';
+        return this.info;
     }
 
     @Override
     public void setInfo(String s) {
-
+        this.info=s;
     }
 
     @Override

@@ -25,16 +25,16 @@ public class Ex2 {
            // json_file = "data\\G1.json";
             DirectedWeightedGraph_ kkk = new DirectedWeightedGraph_(json_file);
             DirectedWeightedGraphAlgorithms an = new DirectedWeightedGraphAlgorithms_(kkk);
+           // System.out.print(an.shortestPathDist(1,3));
+           System.out.print(an.isConnected());
 
-           //System.out.print(an.isConnected());
 
-
-            List<NodeData> l = new LinkedList<>();
-            Iterator<NodeData> n = an.getGraph().nodeIter();
-            while (n.hasNext()) {
-                NodeData e = n.next();
-                l.add(e);
-            }
+//            List<NodeData> l = new LinkedList<>();
+//            Iterator<NodeData> n = an.getGraph().nodeIter();
+//            while (n.hasNext()) {
+//                NodeData e = n.next();
+//                l.add(e);
+//            }
  //           NodeData one = an.getGraph().getNode(20);//NodeData two = an.getGraph().getNode(21);
            // NodeData three = an.getGraph().getNode(3);
 //                l.add(one);
@@ -42,8 +42,8 @@ public class Ex2 {
            //     l.add(three);
 //            System.out.print(l);
 //            System.out.print("siiizze"+"\n");
-            System.out.print(an.tsp(l));
-             System.out.print(an.tsp(l).size());
+        //    System.out.print(an.tsp(l));
+         //    System.out.print(an.tsp(l).size());
 
 
             return kkk;
