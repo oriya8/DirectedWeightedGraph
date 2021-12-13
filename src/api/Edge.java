@@ -58,24 +58,6 @@ public class Edge implements EdgeData {
     @Override
     public void setInfo(String s) {
         this.info = s;
-/*        String[] arr = new String[3];
-        Map<String, String> myMap = new HashMap<String, String>();
-        String[] pairs = s.split(",");
-        for (int i = 0; i < pairs.length; i++) {
-            String pair = pairs[i];
-            String[] keyValue = pair.split(":");
-            myMap.put(keyValue[0], String.valueOf(keyValue[1]));
-
-        }
-
-        int kk = 0;
-        for (Map.Entry<String, String> e : myMap.entrySet()) {
-            arr[kk] = e.getValue();
-            kk++;
-        }
-        this.dest = Integer.parseInt(arr[0]);
-        this.weight = Double.parseDouble(arr[2]);
-        this.src = Integer.parseInt(arr[1]);*/
 
     }
 
