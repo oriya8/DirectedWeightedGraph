@@ -1,11 +1,9 @@
 package api;
 
 import com.google.gson.*;
+import com.google.gson.stream.JsonWriter;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.*;
 
 public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAlgorithms {
@@ -45,7 +43,7 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
 
     private boolean checkLonely(){
 
-        for (int i = 0; i < this.g.edgeSize(); i++) {
+        for (int i = 0; i < this.g.big.size(); i++) {
 
             if (this.g.big.get(i) == null){
                 return true ;
@@ -197,8 +195,6 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         }
         ArrayList<NodeData> revArrayList = new ArrayList<NodeData>();
         for (int i = anssss.size() - 1; i >= 0; i--) {
-
-            // Append the elements in reverse order
             revArrayList.add(anssss.get(i));
         }
         return revArrayList;
@@ -342,7 +338,7 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         while (t.hasNext()) {
             EdgeData gk = (EdgeData)t.next();
             int nod = gk.getDest();
-            NodeData is = g.getNode(nod);
+            NodeData is = this.g.getNode(nod);
             if (!cities.contains(is)){
                 continue;
             }
@@ -363,15 +359,40 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
     }
     @Override
     public boolean save(String file) {
-
-        Gson gson=new GsonBuilder().create();
-        String json=gson.toJson(this.g);
-        try{
-            PrintWriter pw= new PrintWriter(new File(file));
-            pw.write(json);
-            pw.close();
+        try {
+            Gson gson = new Gson();
+            Writer fw = new FileWriter(file, false);
+            JsonWriter jawr = gson.newJsonWriter(fw);
+            jawr.beginObject();
+            Iterator<NodeData> st = this.g.nodeIter();
+            jawr.name("Nodes").beginArray();
+            while (st.hasNext()) {
+                Node temp = (Node) st.next();
+                System.out.println(temp.toString());
+                double x =  temp.getLocation().x();
+                double y =  temp.getLocation().y();
+               double z =  temp.getLocation().z();
+                jawr.beginObject().name("pos").value(x + "," + y + "," + z);
+                jawr.name("id").value(temp.getKey());
+                jawr.endObject();
+            }
+            jawr.endArray().flush();
+            jawr.name("Edges").beginArray();
+            Iterator<EdgeData> la = g.edgeIter();
+            while (la.hasNext()) {
+                EdgeData di = la.next();
+                int src = di.getSrc();
+                int dest = di.getDest();
+                double w = di.getWeight();
+                jawr.beginObject().name("src").value(src);
+                jawr.name("w").value(w);
+                jawr.name("dest").value(dest);
+                jawr.endObject();
+            }
+            jawr.endArray().endObject().flush();
+            jawr.close();
             return true;
-        } catch (FileNotFoundException e) {
+        } catch (IOException e) {
             e.printStackTrace();
             return false;
         }
