@@ -100,7 +100,7 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
                     }
                 }
             }
-            return g.edgeSize() == counter;
+            return g.all.size() == counter;
         }
 
 
