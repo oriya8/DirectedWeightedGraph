@@ -40,90 +40,125 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         }
         return p;
     }
-
-    private boolean checkLonely(){
-
-        for (int i = 0; i < this.g.big.size(); i++) {
-
-            if (this.g.big.get(i) == null){
-                return true ;
-            }
-        }
-        return false ;
-
-    }
-
+//
+//    private boolean checkLonely(){
+//
+//        for (int i = 0; i < this.g.big.size(); i++) {
+//
+//            if (this.g.big.get(i) == null){
+//                return true ;
+//            }
+//        }
+//        return false ;
+//
+//    }
+//
+//    @Override
+//    public boolean isConnected() {
+//        Iterator<NodeData> iter = this.g.nodeIter();
+//        while (iter.hasNext()) {
+//            NodeData ne = iter.next();
+//            ne.setTag(0);
+//        }
+//            if (this.g == null) {
+//                return true;
+//            }
+//            if (this.g != null && this.g.nodeSize() == 0) {
+//                return true;
+//            }
+//            if (this.g != null && this.g.nodeSize() == 1) {
+//                return true;
+//            }
+//
+//            if (checkLonely()){
+//                return false ;
+//            }
+//
+//            int counter = 0 ;
+//            Queue<NodeData> que = new LinkedList<>();
+//            que.add(this.g.nodeIter().next());
+//            NodeData n = que.peek();
+//            n.setTag(0);
+//
+//            while (!que.isEmpty()) {
+//                n = que.poll();
+//                counter++;
+//
+//                Iterator it = this.g.edgeIter(n.getKey());
+//                while (it.hasNext()) {
+//                    EdgeData edge = (Edge) it.next();
+//                    NodeData dest =  g.getNode(edge.getDest());
+//                    if (dest.getTag() == -1) {
+//                        if (!havePath(dest.getKey(), n.getKey())) {
+//                            return false;
+//                        }
+//                        dest.setTag(0);
+//                        que.add(dest);
+//                    }
+//                }
+//            }
+//            return g.all.size() == counter;
+//        }
+//
+//
+//        public boolean havePath(int src, int dest) {
+//            Stack<NodeData> st = new Stack<>();
+//            NodeData temp = g.getNode(src);
+//            HashSet<Integer> visited = new HashSet<>();
+//            visited.add(src);
+//            st.add(temp);
+//            while (!st.empty()) {
+//                temp = st.pop();
+//                Iterator tor = this.g.edgeIter(temp.getKey());
+//                while (tor.hasNext()) {
+//                    EdgeData cur = (Edge)tor.next();
+//                    NodeData next = g.getNode(cur.getDest());
+//                    if (!visited.contains(next.getKey())) {
+//                        visited.add(next.getKey());
+//                        st.add(next);
+//                    }
+//                    if (next.getKey() == dest)
+//                        return true;
+//                }
+//            }
+//            return false;
+//        }
     @Override
     public boolean isConnected() {
-        Iterator<NodeData> iter = this.g.nodeIter();
-        while (iter.hasNext()) {
-            NodeData ne = iter.next();
-            ne.setTag(0);
+        //boolean idk = false;
+    ArrayList<NodeData>anssss= new ArrayList<NodeData>();
+    Iterator<NodeData> r = g.nodeIter();
+    while (r.hasNext()){
+        NodeData in = r.next();
+        Iterator re =g.edgeIter(in.getKey());
+        boolean a =isconnrec(in,re,anssss);
+        // System.out.print("\n"+"n:");
+
+        if (a == false) return false;
+
+    }
+    return true;
+}
+    public boolean isconnrec (NodeData n, Iterator t, ArrayList<NodeData> good){
+        if(good.size()==g.nodeSize()){
+           // System.out.print("\n"+"n:"+n);
+            return true;
         }
-            if (this.g == null) {
-                return true;
+        while (t.hasNext()) {
+            EdgeData gk = (EdgeData)t.next();
+            int nod = gk.getDest();
+            NodeData is = g.getNode(nod);
+            if(good.contains(is)){
+                continue;
             }
-            if (this.g != null && this.g.nodeSize() == 0) {
-                return true;
-            }
-            if (this.g != null && this.g.nodeSize() == 1) {
-                return true;
-            }
-
-            if (checkLonely()){
-                return false ;
-            }
-
-            int counter = 0 ;
-            Queue<NodeData> que = new LinkedList<>();
-            que.add(this.g.nodeIter().next());
-            NodeData n = que.peek();
-            n.setTag(0);
-
-            while (!que.isEmpty()) {
-                n = que.poll();
-                counter++;
-
-                Iterator it = this.g.edgeIter(n.getKey());
-                while (it.hasNext()) {
-                    EdgeData edge = (Edge) it.next();
-                    NodeData dest =  g.getNode(edge.getDest());
-                    if (dest.getTag() == -1) {
-                        if (!havePath(dest.getKey(), n.getKey())) {
-                            return false;
-                        }
-                        dest.setTag(0);
-                        que.add(dest);
-                    }
-                }
-            }
-            return g.all.size() == counter;
+            good.add(is);
+            Iterator a = this.g.edgeIter(nod);
+            isconnrec(is,a,good);
+            if(good.size()==g.nodeSize()){
+                return true;}
         }
-
-
-        public boolean havePath(int src, int dest) {
-            Stack<NodeData> st = new Stack<>();
-            NodeData temp = g.getNode(src);
-            HashSet<Integer> visited = new HashSet<>();
-            visited.add(src);
-            st.add(temp);
-            while (!st.empty()) {
-                temp = st.pop();
-                Iterator tor = this.g.edgeIter(temp.getKey());
-                while (tor.hasNext()) {
-                    EdgeData cur = (Edge)tor.next();
-                    NodeData next = g.getNode(cur.getDest());
-                    if (!visited.contains(next.getKey())) {
-                        visited.add(next.getKey());
-                        st.add(next);
-                    }
-                    if (next.getKey() == dest)
-                        return true;
-                }
-            }
-            return false;
-        }
-
+        return false;
+    }
 
 
 
