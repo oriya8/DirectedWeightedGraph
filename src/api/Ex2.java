@@ -25,8 +25,8 @@ public class Ex2 {
            // json_file = "data\\G1.json";
             DirectedWeightedGraph_ kkk = new DirectedWeightedGraph_(json_file);
             DirectedWeightedGraphAlgorithms an = new DirectedWeightedGraphAlgorithms_(kkk);
-           // System.out.print(an.shortestPathDist(1,3));
-           System.out.print(an.isConnected());
+            System.out.print(an.shortestPath(1,3));
+        //   System.out.print(an.isConnected());
 
 
 //            List<NodeData> l = new LinkedList<>();

@@ -1,5 +1,13 @@
 package api;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.util.*;
 
 public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAlgorithms {
@@ -149,22 +157,52 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         if(destination.getWeight()==max){
             return -1;
         }
+        System.out.println(destination.getInfo());
+        System.out.println(g.getNode(2).getInfo());
+
         return destination.getWeight();
     }
 
     @Override
     public List<NodeData> shortestPath(int src, int dest) {
+        ArrayList<NodeData>anssss= new ArrayList<NodeData>();
+        int max = Integer.MAX_VALUE;
+        Iterator<NodeData> iter = this.g.nodeIter();
+        while (iter.hasNext()) {
+            NodeData ne = iter.next();
+            ne.setWeight(max);
+            ne.setTag(0);
+            ne.setInfo("-1");
+        }
+        NodeData from = g.getNode(src);
+        from.setWeight(0);
+        PriorityQueue<NodeData> tor = new PriorityQueue<NodeData>(new Comparator<NodeData>() {
+            public int compare(NodeData one, NodeData two) {
+                if(one.getWeight()<two.getWeight()) {
+                    return 1;}
+                else {
+                    return -1;
+                }
+            }
+        });
+        tor.add(from);
+        help(tor);
+        String info="";
+        NodeData temp = g.getNode(dest);
+        info = temp.getInfo();
+        anssss.add(temp);
+        while (temp!=from){
+            temp =  g.getNode(Integer.valueOf(info));
+            anssss.add(temp);
+            info= temp.getInfo();
+        }
+        ArrayList<NodeData> revArrayList = new ArrayList<NodeData>();
+        for (int i = anssss.size() - 1; i >= 0; i--) {
 
-
-
-
-
-
-
-
-
-
-        return null;
+            // Append the elements in reverse order
+            revArrayList.add(anssss.get(i));
+        }
+        return revArrayList;
     }
 
 
@@ -331,6 +369,14 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
 
     @Override
     public boolean load(String file) {
+        try {
+            this.g = new DirectedWeightedGraph_(file);
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        }
+
         return false;
     }
+
+
 }
