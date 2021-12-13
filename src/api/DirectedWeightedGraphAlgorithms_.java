@@ -1,26 +1,25 @@
 package api;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAlgorithms {
-    private DirectedWeightedGraph g;
+    private DirectedWeightedGraph_ g;
 
-    public DirectedWeightedGraphAlgorithms_(DirectedWeightedGraph g) {
+    public DirectedWeightedGraphAlgorithms_(DirectedWeightedGraph_ g) {
         this.g = g;
+
     }
 
 
     @Override
     public void init(DirectedWeightedGraph g) {
-        this.g=g;
+        this.g= (DirectedWeightedGraph_) g;
     }
 
     @Override
@@ -44,17 +43,17 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
         return p;
     }
 
-//    private boolean checkLonely(){
-//
-//        for (int i = 0; i < this.g.edgeSize(); i++) {
-//
-//            if (this.g.g == null){
-//                return true ;
-//            }
-//        }
-//        return false ;
-//
-//    }
+    private boolean checkLonely(){
+
+        for (int i = 0; i < this.g.edgeSize(); i++) {
+
+            if (this.g.big.get(i) == null){
+                return true ;
+            }
+        }
+        return false ;
+
+    }
 
     @Override
     public boolean isConnected() {
@@ -72,10 +71,10 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
             if (this.g != null && this.g.nodeSize() == 1) {
                 return true;
             }
-//
-//            if (checkLonely()){
-//                return false ;
-//            }
+
+            if (checkLonely()){
+                return false ;
+            }
 
             int counter = 0 ;
             Queue<NodeData> que = new LinkedList<>();
@@ -100,7 +99,7 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
                     }
                 }
             }
-            return g.edgeSize() == counter;
+            return g.all.size() == counter;
         }
 
 
@@ -364,7 +363,18 @@ public class DirectedWeightedGraphAlgorithms_ implements DirectedWeightedGraphAl
     }
     @Override
     public boolean save(String file) {
-        return false;
+
+        Gson gson=new GsonBuilder().create();
+        String json=gson.toJson(this.g);
+        try{
+            PrintWriter pw= new PrintWriter(new File(file));
+            pw.write(json);
+            pw.close();
+            return true;
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 
     @Override
